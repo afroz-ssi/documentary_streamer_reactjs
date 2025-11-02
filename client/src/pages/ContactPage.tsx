@@ -111,7 +111,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold mb-1">Email</h3>
                     <p className="text-muted-foreground">
-                      contact@docustream.com
+                      contact@Undefined Explores.com
                     </p>
                   </div>
                 </div>

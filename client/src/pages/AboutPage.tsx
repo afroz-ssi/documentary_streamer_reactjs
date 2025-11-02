@@ -37,14 +37,14 @@ export default function AboutPage() {
       <div className="relative h-[60vh] overflow-hidden">
         <img
           src={heroBanner}
-          alt="About DocuStream"
+          alt="About Undefined Explores"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center px-6">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
-              About DocuStream
+              About Undefined Explores
             </h1>
             <p className="text-xl text-white/90 max-w-2xl mx-auto">
               Your premier destination for premium documentary content
@@ -59,7 +59,7 @@ export default function AboutPage() {
             <div className="space-y-6">
               <h2 className="text-3xl font-semibold">Our Mission</h2>
               <p className="text-muted-foreground leading-relaxed">
-                At DocuStream, we believe in the power of storytelling to educate,
+                At Undefined Explores, we believe in the power of storytelling to educate,
                 inspire, and transform. Our mission is to make high-quality
                 documentaries accessible to everyone, bringing together the world's
                 most compelling stories in one place.

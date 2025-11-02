@@ -12,7 +12,7 @@ export default function AdminProfile() {
   const [, setLocation] = useLocation();
   const [formData, setFormData] = useState({
     name: "Admin User",
-    email: "admin@docustream.com",
+    email: "admin@Undefined Explores.com",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
@@ -44,7 +44,7 @@ export default function AdminProfile() {
               </Avatar>
               <div>
                 <h2 className="text-xl font-semibold">Admin User</h2>
-                <p className="text-muted-foreground">admin@docustream.com</p>
+                <p className="text-muted-foreground">admin@Undefined Explores.com</p>
                 <Button variant="outline" size="sm" className="mt-2">
                   Change Avatar
                 </Button>

@@ -28,7 +28,7 @@ export function Header({ theme = "light", onThemeToggle, onMenuToggle, showMenu 
           <Link href="/">
             <div className="flex items-center gap-2 cursor-pointer" data-testid="link-home">
               <Film className="w-8 h-8 text-primary" />
-              <span className="text-xl font-bold">DocuStream</span>
+              <span className="text-xl font-bold">Undefined Explores</span>
             </div>
           </Link>
         </div>

@@ -22,7 +22,7 @@ export function AdminSidebar({ onLogout }: AdminSidebarProps) {
         <div className="flex items-center gap-2">
           <Film className="w-8 h-8 text-primary" />
           <div>
-            <h2 className="font-bold text-lg">DocuStream</h2>
+            <h2 className="font-bold text-lg">Undefined Explores</h2>
             <p className="text-xs text-muted-foreground">Admin Panel</p>
           </div>
         </div>
