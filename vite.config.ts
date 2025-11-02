@@ -25,5 +25,5 @@ export default defineConfig({
       deny: ["**/.*"],
     },
   },
-  base: "./",
+  base: "/documentary_streamer_reactjs/",
 });
