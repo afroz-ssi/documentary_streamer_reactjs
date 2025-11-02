@@ -1,3 +1,6 @@
+    // "homepage": "https://afroz-ssi.github.io/documentary_streamer_reactjs",
+
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
@@ -22,5 +25,5 @@ export default defineConfig({
       deny: ["**/.*"],
     },
   },
-  base: "/documentary_streamer_reactjs/",
+  base: "./",
 });

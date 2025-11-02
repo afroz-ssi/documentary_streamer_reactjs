@@ -1,12 +1,12 @@
 {
   "name": "rest-express",
-  "homepage": "https://afroz-ssi.github.io/documentary_streamer_reactjs",
+  "homepage": "https://documentary.streamer.com",
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx server/index.ts",
-    "build": "vite build && copy public\\404.html dist\\public\\404.html && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
+    "build": "vite build && copy public\\404.html dist\\public\\404.html && copy public\\CNAME dist\\public\\CNAME && esbuild server/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist",
     "start": "NODE_ENV=production node dist/index.js",
     "check": "tsc",
     "db:push": "drizzle-kit push",
