@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, Router } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -15,20 +15,24 @@ import AdminProfile from "@/pages/AdminProfile";
 import AdminSettings from "@/pages/AdminSettings";
 import NotFound from "@/pages/not-found";
 
+const basePath = import.meta.env.DEV ? "" : "/documentary_streamer_reactjs";
+
 function AppRouter() {
   return (
-    <Switch>
-      <Route path="/" component={HomePage} />
-      <Route path="/documentary/:id" component={DocumentaryDetailPage} />
-      <Route path="/about" component={AboutPage} />
-      <Route path="/contact" component={ContactPage} />
-      <Route path="/admin/login" component={AdminLogin} />
-      <Route path="/admin/documentaries" component={AdminDocumentaries} />
-      <Route path="/admin/profile" component={AdminProfile} />
-      <Route path="/admin/settings" component={AdminSettings} />
-      <Route path="/admin" component={AdminDashboard} />
-      <Route component={NotFound} />
-    </Switch>
+    <Router base={basePath}>
+      <Switch>
+        <Route path="/" component={HomePage} />
+        <Route path="/documentary/:id" component={DocumentaryDetailPage} />
+        <Route path="/about" component={AboutPage} />
+        <Route path="/contact" component={ContactPage} />
+        <Route path="/admin/login" component={AdminLogin} />
+        <Route path="/admin/documentaries" component={AdminDocumentaries} />
+        <Route path="/admin/profile" component={AdminProfile} />
+        <Route path="/admin/settings" component={AdminSettings} />
+        <Route path="/admin" component={AdminDashboard} />
+        <Route component={NotFound} />
+      </Switch>
+    </Router>
   );
 }
 
