@@ -26,10 +26,10 @@ function AppRouter() {
         <Route path="/about" component={AboutPage} />
         <Route path="/contact" component={ContactPage} />
         <Route path="/admin/login" component={AdminLogin} />
-        <Route path="/admin" component={AdminDashboard} />
         <Route path="/admin/documentaries" component={AdminDocumentaries} />
         <Route path="/admin/profile" component={AdminProfile} />
         <Route path="/admin/settings" component={AdminSettings} />
+        <Route path="/admin" component={AdminDashboard} />
         <Route component={NotFound} />
       </Switch>
     </Router>
