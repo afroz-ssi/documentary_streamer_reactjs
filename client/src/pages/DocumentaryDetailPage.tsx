@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Header } from "@/components/Header";
 import { VideoPlayer } from "@/components/VideoPlayer";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { AuthForm } from "@/components/AuthForm";
 import { useTheme } from "@/components/ThemeProvider";
 import { useRoute } from "wouter";
 import { Clock, Calendar, Star, User } from "lucide-react";
@@ -24,10 +26,15 @@ const mockDocumentary = {
 export default function DocumentaryDetailPage() {
   const { theme, toggleTheme } = useTheme();
   const [, params] = useRoute("/documentary/:id");
+  const [isAuthFormOpen, setIsAuthFormOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
-      <Header theme={theme} onThemeToggle={toggleTheme} />
+      <Header 
+        theme={theme} 
+        onThemeToggle={toggleTheme} 
+        onSignInClick={() => setIsAuthFormOpen(true)}
+      />
 
       <div className="relative h-[70vh] overflow-hidden">
         <img
@@ -122,6 +129,12 @@ export default function DocumentaryDetailPage() {
           </div>
         </div>
       </div>
+      
+      <AuthForm 
+        isOpen={isAuthFormOpen} 
+        onClose={() => setIsAuthFormOpen(false)} 
+        onAuthSuccess={() => setIsAuthFormOpen(false)}
+      />
     </div>
   );
 }

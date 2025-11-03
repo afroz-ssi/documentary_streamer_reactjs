@@ -8,6 +8,7 @@ import HomePage from "@/pages/HomePage";
 import DocumentaryDetailPage from "@/pages/DocumentaryDetailPage";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
+import PhotographyPage from "@/pages/PhotographyPage";
 import AdminLogin from "@/pages/AdminLogin";
 import AdminDashboard from "@/pages/AdminDashboard";
 import AdminDocumentaries from "@/pages/AdminDocumentaries";
@@ -25,6 +26,7 @@ function AppRouter() {
         <Route path="/documentary/:id" component={DocumentaryDetailPage} />
         <Route path="/about" component={AboutPage} />
         <Route path="/contact" component={ContactPage} />
+        <Route path="/photography" component={PhotographyPage} />
         <Route path="/admin/login" component={AdminLogin} />
         <Route path="/admin/documentaries" component={AdminDocumentaries} />
         <Route path="/admin/profile" component={AdminProfile} />

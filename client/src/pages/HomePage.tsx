@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CategorySidebar } from "@/components/CategorySidebar";
 import { DocumentaryCard } from "@/components/DocumentaryCard";
 import { Header } from "@/components/Header";
+import { AuthForm } from "@/components/AuthForm";
+import { HeroBanner } from "@/components/HeroBanner";
+import { AdminPanel, HeroBannerData } from "@/components/AdminPanel";
 import { useTheme } from "@/components/ThemeProvider";
 import { useLocation } from "wouter";
+import UserDashboard from "./UserDashboard";
 import heroBanner from "@assets/generated_images/Documentary_platform_hero_banner_4040ee29.png";
 import natureThumbnail from "@assets/generated_images/Nature_documentary_thumbnail_landscape_a133d6bc.png";
 import scienceThumbnail from "@assets/generated_images/Science_documentary_laboratory_scene_cb011830.png";
@@ -105,20 +109,72 @@ const mockDocumentaries = [
 
 export default function HomePage() {
   const { theme, toggleTheme } = useTheme();
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isAuthFormOpen, setIsAuthFormOpen] = useState(false);
+  const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [heroBannerData, setHeroBannerData] = useState<HeroBannerData>({
+    title: "Undefined Possibilities Await",
+    subtitle: "Explore the unknown, discover the extraordinary, and venture into uncharted territories of knowledge",
+    backgroundImage: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+  });
 
-  const filteredDocumentaries =
-    selectedCategories.length === 0 || selectedCategories.includes("all")
-      ? mockDocumentaries
-      : mockDocumentaries.filter((doc) =>
-          doc.categories.some((cat) =>
-            selectedCategories.some(
-              (selectedCat) => selectedCat.toLowerCase() === cat.toLowerCase()
-            )
-          )
-        );
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.split('?')[1] || '');
+    const search = urlParams.get('search');
+    if (search) {
+      setSearchQuery(search);
+    }
+  }, [location]);
+
+  const handleAuthSuccess = (userData: any) => {
+    setUser(userData.user);
+    localStorage.setItem('token', userData.token);
+  };
+
+  const handleSignOut = () => {
+    setUser(null);
+    localStorage.removeItem('token');
+  };
+
+  if (user) {
+    return <UserDashboard user={user} onSignOut={handleSignOut} />;
+  }
+
+  const handleCategorySelect = (categoryId: string) => {
+    setSearchQuery("");
+    setLocation("/");
+    if (categoryId === "all") {
+      setSelectedCategories([]);
+    } else {
+      setSelectedCategories([categoryId]);
+    }
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (!query) {
+      setLocation("/");
+    }
+  };
+
+  const filteredDocumentaries = mockDocumentaries.filter((doc) => {
+    const matchesSearch = !searchQuery || 
+      doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      doc.categories.some(cat => cat.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    const matchesCategory = selectedCategories.length === 0 ||
+      doc.categories.some((cat) =>
+        selectedCategories.some(
+          (selectedCat) => selectedCat.toLowerCase() === cat.toLowerCase()
+        )
+      );
+    
+    return matchesSearch && matchesCategory;
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -127,67 +183,66 @@ export default function HomePage() {
         onThemeToggle={toggleTheme}
         onMenuToggle={() => setIsSidebarOpen(!isSidebarOpen)}
         showMenu={true}
+        onCategorySelect={handleCategorySelect}
+        onSignInClick={() => setIsAuthFormOpen(true)}
+        onSearch={handleSearch}
       />
 
-      <div className="relative h-[70vh] overflow-hidden">
-        <img
-          src={heroBanner}
-          alt="Documentary Hero"
-          className="w-full h-full object-cover"
+      <div className="bg-background/80 backdrop-blur-sm border-b border-border sticky top-16 z-30">
+        <CategorySidebar
+          selectedCategories={selectedCategories}
+          onCategoryChange={setSelectedCategories}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
-        <div className="absolute inset-0 flex items-center justify-center text-center">
-          <div className="max-w-4xl px-6 space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold text-white">
-              Explore the World Through Documentaries
-            </h1>
-            <p className="text-xl text-white/90">
-              Discover captivating stories across Science, Technology, and History
+      </div>
+
+      <HeroBanner 
+        data={heroBannerData}
+        onAdminClick={() => setIsAdminPanelOpen(true)}
+        showAdminButton={true}
+      />
+
+      <main className="p-6 md:p-8">
+        <div className="max-w-[1920px] mx-auto">
+          <div className="mb-8">
+            <h2 className="text-3xl font-semibold mb-2">
+              {searchQuery
+                ? `Search Results for "${searchQuery}"`
+                : selectedCategories.length === 0
+                ? "All Documentaries"
+                : selectedCategories.length === 1
+                ? selectedCategories[0].charAt(0).toUpperCase() +
+                  selectedCategories[0].slice(1)
+                : `${selectedCategories.length} Categories Selected`}
+            </h2>
+            <p className="text-muted-foreground">
+              {filteredDocumentaries.length} documentaries available
             </p>
           </div>
-        </div>
-      </div>
 
-      <div className="flex">
-        <div
-          className={`${
-            isSidebarOpen ? "block" : "hidden"
-          } md:block fixed md:sticky top-16 z-40 h-[calc(100vh-4rem)]`}
-        >
-          <CategorySidebar
-            selectedCategories={selectedCategories}
-            onCategoryChange={setSelectedCategories}
-          />
-        </div>
-
-        <main className="flex-1 p-6 md:p-8">
-          <div className="max-w-[1920px] mx-auto">
-            <div className="mb-8">
-              <h2 className="text-3xl font-semibold mb-2">
-                {selectedCategories.length === 0 || selectedCategories.includes("all")
-                  ? "All Documentaries"
-                  : selectedCategories.length === 1
-                  ? selectedCategories[0].charAt(0).toUpperCase() +
-                    selectedCategories[0].slice(1)
-                  : `${selectedCategories.length} Categories Selected`}
-              </h2>
-              <p className="text-muted-foreground">
-                {filteredDocumentaries.length} documentaries available
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredDocumentaries.map((doc) => (
-                <DocumentaryCard
-                  key={doc.id}
-                  {...doc}
-                  onClick={() => setLocation(`/documentary/${doc.id}`)}
-                />
-              ))}
-            </div>
+          <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8 gap-3 sm:gap-4">
+            {filteredDocumentaries.map((doc) => (
+              <DocumentaryCard
+                key={doc.id}
+                {...doc}
+                onClick={() => setLocation(`/documentary/${doc.id}`)}
+              />
+            ))}
           </div>
-        </main>
-      </div>
+        </div>
+      </main>
+
+      <AuthForm 
+        isOpen={isAuthFormOpen} 
+        onClose={() => setIsAuthFormOpen(false)} 
+        onAuthSuccess={handleAuthSuccess}
+      />
+      
+      <AdminPanel
+        isOpen={isAdminPanelOpen}
+        onClose={() => setIsAdminPanelOpen(false)}
+        onSave={setHeroBannerData}
+        currentData={heroBannerData}
+      />
     </div>
   );
 }

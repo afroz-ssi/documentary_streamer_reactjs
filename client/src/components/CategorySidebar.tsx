@@ -1,11 +1,8 @@
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { Beaker, Cpu, BookOpen, Film, Leaf, Rocket, Users, Landmark, Trophy, Palette } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface Category {
   id: string;
   name: string;
-  icon: React.ReactNode;
 }
 
 interface CategorySidebarProps {
@@ -14,57 +11,54 @@ interface CategorySidebarProps {
 }
 
 const categories: Category[] = [
-  { id: "all", name: "All Documentaries", icon: <Film className="w-5 h-5" /> },
-  { id: "science", name: "Science", icon: <Beaker className="w-5 h-5" /> },
-  { id: "technology", name: "Technology", icon: <Cpu className="w-5 h-5" /> },
-  { id: "history", name: "History", icon: <BookOpen className="w-5 h-5" /> },
-  { id: "nature", name: "Nature", icon: <Leaf className="w-5 h-5" /> },
-  { id: "space", name: "Space", icon: <Rocket className="w-5 h-5" /> },
-  { id: "culture", name: "Culture", icon: <Users className="w-5 h-5" /> },
-  { id: "politics", name: "Politics", icon: <Landmark className="w-5 h-5" /> },
-  { id: "sports", name: "Sports", icon: <Trophy className="w-5 h-5" /> },
-  { id: "art", name: "Art", icon: <Palette className="w-5 h-5" /> },
+  { id: "all", name: "All" },
+  { id: "science", name: "Science" },
+  { id: "technology", name: "Technology" },
+  { id: "history", name: "History" },
+  { id: "nature", name: "Nature" },
+  { id: "space", name: "Space" },
+  { id: "culture", name: "Culture" },
+  { id: "politics", name: "Politics" },
+  { id: "sports", name: "Sports" },
+  { id: "art", name: "Art" },
 ];
 
 export function CategorySidebar({ selectedCategories, onCategoryChange }: CategorySidebarProps) {
-  const handleCategoryToggle = (categoryId: string) => {
+  const handleCategorySelect = (categoryId: string) => {
     if (categoryId === "all") {
-      if (selectedCategories.includes("all")) {
-        onCategoryChange([]);
-      } else {
-        onCategoryChange(["all"]);
-      }
+      onCategoryChange([]);
     } else {
-      let newCategories: string[];
-      if (selectedCategories.includes(categoryId)) {
-        newCategories = selectedCategories.filter(id => id !== categoryId && id !== "all");
-      } else {
-        newCategories = [...selectedCategories.filter(id => id !== "all"), categoryId];
-      }
-      onCategoryChange(newCategories);
+      onCategoryChange([categoryId]);
     }
   };
 
+  const isSelected = (categoryId: string) => {
+    if (categoryId === "all") {
+      return selectedCategories.length === 0;
+    }
+    return selectedCategories.includes(categoryId);
+  };
+
   return (
-    <div className="w-64 h-full bg-card border-r border-border p-6 space-y-3">
-      <h2 className="text-lg font-semibold mb-4 text-foreground">Categories</h2>
-      {categories.map((category) => (
-        <div key={category.id} className="flex items-center space-x-3 hover-elevate p-2 rounded-lg">
-          <Checkbox
-            id={category.id}
-            checked={selectedCategories.includes(category.id) || (selectedCategories.length === 0 && category.id === "all")}
-            onCheckedChange={() => handleCategoryToggle(category.id)}
-            data-testid={`checkbox-category-${category.id}`}
-          />
-          <Label
-            htmlFor={category.id}
-            className="flex items-center gap-2 cursor-pointer flex-1"
+    <div className="w-full p-3 overflow-x-auto scrollbar-hide">
+      <div className="flex gap-2 items-center justify-center min-w-max mx-auto">
+        {categories.map((category) => (
+          <Button
+            key={category.id}
+            variant={isSelected(category.id) ? "secondary" : "outline"}
+            size="sm"
+            onClick={() => handleCategorySelect(category.id)}
+            className={`whitespace-nowrap text-sm px-4 py-2 h-8 transition-colors ${
+              isSelected(category.id) 
+                ? "bg-accent text-accent-foreground hover:bg-accent/80" 
+                : "hover:bg-accent/50"
+            }`}
+            data-testid={`button-category-${category.id}`}
           >
-            {category.icon}
-            <span>{category.name}</span>
-          </Label>
-        </div>
-      ))}
+            {category.name}
+          </Button>
+        ))}
+      </div>
     </div>
   );
 }

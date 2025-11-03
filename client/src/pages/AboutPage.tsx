@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { Header } from "@/components/Header";
+import { AuthForm } from "@/components/AuthForm";
 import { useTheme } from "@/components/ThemeProvider";
+import { useLocation } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Film, Users, Award, Globe } from "lucide-react";
 import heroBanner from "@assets/generated_images/Documentary_platform_hero_banner_4040ee29.png";
@@ -29,22 +32,39 @@ const values = [
 
 export default function AboutPage() {
   const { theme, toggleTheme } = useTheme();
+  const [isAuthFormOpen, setIsAuthFormOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [, setLocation] = useLocation();
+
+  const handleAuthSuccess = (userData: any) => {
+    setUser(userData.user);
+    localStorage.setItem('token', userData.token);
+  };
+
+  const handleSearch = (query: string) => {
+    setLocation(`/?search=${encodeURIComponent(query)}`);
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      <Header theme={theme} onThemeToggle={toggleTheme} />
+      <Header 
+        theme={theme} 
+        onThemeToggle={toggleTheme} 
+        onSignInClick={() => setIsAuthFormOpen(true)}
+        onSearch={handleSearch}
+      />
 
       <div className="relative h-[60vh] overflow-hidden">
         <img
           src={heroBanner}
-          alt="About Undefined Explores"
+          alt="About Undefined "
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center px-6">
             <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
-              About Undefined Explores
+              About Undefined 
             </h1>
             <p className="text-xl text-white/90 max-w-2xl mx-auto">
               Your premier destination for premium documentary content
@@ -59,7 +79,7 @@ export default function AboutPage() {
             <div className="space-y-6">
               <h2 className="text-3xl font-semibold">Our Mission</h2>
               <p className="text-muted-foreground leading-relaxed">
-                At Undefined Explores, we believe in the power of storytelling to educate,
+                At Undefined , we believe in the power of storytelling to educate,
                 inspire, and transform. Our mission is to make high-quality
                 documentaries accessible to everyone, bringing together the world's
                 most compelling stories in one place.
@@ -106,6 +126,12 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
+      
+      <AuthForm 
+        isOpen={isAuthFormOpen} 
+        onClose={() => setIsAuthFormOpen(false)} 
+        onAuthSuccess={handleAuthSuccess}
+      />
     </div>
   );
 }

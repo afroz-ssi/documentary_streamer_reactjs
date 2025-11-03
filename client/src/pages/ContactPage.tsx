@@ -1,21 +1,35 @@
+import { useState } from "react";
 import { Header } from "@/components/Header";
+import { AuthForm } from "@/components/AuthForm";
 import { useTheme } from "@/components/ThemeProvider";
+import { useLocation } from "wouter";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, MapPin } from "lucide-react";
-import { useState } from "react";
 
 export default function ContactPage() {
   const { theme, toggleTheme } = useTheme();
+  const [isAuthFormOpen, setIsAuthFormOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [, setLocation] = useLocation();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     subject: "",
     message: "",
   });
+
+  const handleAuthSuccess = (userData: any) => {
+    setUser(userData.user);
+    localStorage.setItem('token', userData.token);
+  };
+
+  const handleSearch = (query: string) => {
+    setLocation(`/?search=${encodeURIComponent(query)}`);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +38,12 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header theme={theme} onThemeToggle={toggleTheme} />
+      <Header 
+        theme={theme} 
+        onThemeToggle={toggleTheme} 
+        onSignInClick={() => setIsAuthFormOpen(true)}
+        onSearch={handleSearch}
+      />
 
       <div className="py-16 px-6 md:px-8">
         <div className="max-w-6xl mx-auto space-y-12">
@@ -111,7 +130,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold mb-1">Email</h3>
                     <p className="text-muted-foreground">
-                      contact@Undefined Explores.com
+                      contact@Undefined .com
                     </p>
                   </div>
                 </div>
@@ -159,6 +178,12 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
+      
+      <AuthForm 
+        isOpen={isAuthFormOpen} 
+        onClose={() => setIsAuthFormOpen(false)} 
+        onAuthSuccess={handleAuthSuccess}
+      />
     </div>
   );
 }

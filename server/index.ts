@@ -1,6 +1,8 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { signUp, signIn } from "./auth";
+import { createBooking, getBookings, updateBookingStatus } from "./bookings";
 
 const app = express();
 
@@ -15,6 +17,15 @@ app.use(express.json({
   }
 }));
 app.use(express.urlencoded({ extended: false }));
+
+// Authentication routes
+app.post("/api/auth/signup", signUp);
+app.post("/api/auth/signin", signIn);
+
+// Booking routes
+app.post("/api/bookings", createBooking);
+app.get("/api/bookings", getBookings);
+app.put("/api/bookings/:id", updateBookingStatus);
 
 app.use((req, res, next) => {
   const start = Date.now();

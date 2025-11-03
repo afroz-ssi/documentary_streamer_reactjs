@@ -64,6 +64,12 @@
 
   --accent-foreground: 222 15% 12%;
 
+  /* Greenery theme colors */
+  --greenery: 142 76% 36%;
+  --greenery-foreground: 0 0% 100%;
+  --greenery-light: 142 60% 85%;
+  --greenery-dark: 142 80% 25%;
+
   --destructive: 0 84% 48%;
 
   --destructive-foreground: 0 0% 100%;
@@ -181,6 +187,12 @@
   --accent: 220 14% 20%;
 
   --accent-foreground: 0 0% 98%;
+
+  /* Greenery theme colors */
+  --greenery: 142 76% 52%;
+  --greenery-foreground: 0 0% 100%;
+  --greenery-light: 142 40% 25%;
+  --greenery-dark: 142 80% 35%;
 
   --destructive: 0 84% 48%;
 
@@ -347,5 +359,15 @@
   .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
     inset: -1px;
+  }
+
+  /* Hide scrollbar for horizontal scrolling */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }
